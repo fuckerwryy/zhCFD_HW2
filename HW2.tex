@@ -1,0 +1,142 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{ctex} % 支持中文
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+    language=Python, % 添加语言支持
+    basicstyle=\ttfamily\small,
+    numbers=left,
+    numberstyle=\tiny,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    breaklines=true,
+    frame=single,
+    captionpos=b
+}
+
+\title{计算流体力学作业2}
+\author{郑恒2200011086}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{数据算法原理}
+\subsection{一阶导数 $\frac{\partial u}{\partial x}$ 的差分格式}
+\subsubsection{采用2个点的一阶差分格式}
+\begin{itemize}
+    \item 二点格式：
+    将$u_{i+1}$泰勒展开：
+    \[u_{i+1} = u_i + \Delta x \frac{\partial u}{\partial x} + \frac{1}{2} \Delta x^2 \frac{\partial^2 u}{\partial x^2} + \mathcal{O}(\Delta x^3)\]
+    \[
+    \frac{\partial u}{\partial x} = \frac{u_{i+1} - u_i}{\Delta x}+ \mathcal{O}(\Delta x)
+    \]
+    精度：$\mathcal{O}(\Delta x)$。
+\end{itemize}
+\subsubsection{采用2个点的二阶差分格式}
+\begin{itemize}
+    \item 二点格式：
+    将$u_{i+1}$和$u_{i-1}$泰勒展开：
+    \[u_{i+1} = u_i + \Delta x \frac{\partial u}{\partial x} + \frac{1}{2} \Delta x^2 \frac{\partial^2 u}{\partial x^2} +\frac{1}{6} \Delta x^3 \frac{\partial^3 u}{\partial x^3} + \mathcal{O}(\Delta x^4)\]
+    \[u_{i-1} = u_i - \Delta x \frac{\partial u}{\partial x} + \frac{1}{2} \Delta x^2 \frac{\partial^2 u}{\partial x^2} -\frac{1}{6} \Delta x^3 \frac{\partial^3 u}{\partial x^3} + \mathcal{O}(\Delta x^4)\]
+    两式相减：
+    \[
+    \frac{\partial u}{\partial x} = \frac{u_{i+1} - u_{i-1}}{2\Delta x} + \mathcal{O}(\Delta x^2)
+    \]
+    精度：$\mathcal{O}(\Delta x^2)$。
+\end{itemize}
+
+\subsection{二阶导数 $\frac{\partial^2 u}{\partial x^2}$ 的差分格式}
+\subsubsection{采用3个点的一阶差分格式}
+\begin{itemize}
+    \item 三点格式：
+    将$u_{i-2}$和$u_{i-1}$泰勒展开到4阶：
+    \[u_{i-2} = u_i - 2\Delta x \frac{\partial u}{\partial x} + 2\Delta x^2 \frac{\partial^2 u}{\partial x^2} -\frac{4}{3} \Delta x^3 \frac{\partial^3 u}{\partial x^3} + \frac{2}{3} \Delta x^4 \frac{\partial^4 u}{\partial x^4} + \mathcal{O}(\Delta x^5)\]
+    \[u_{i-1} = u_i - \Delta x \frac{\partial u}{\partial x} + \frac{1}{2} \Delta x^2 \frac{\partial^2 u}{\partial x^2} -\frac{1}{6} \Delta x^3 \frac{\partial^3 u}{\partial x^3} + \frac{1}{24} \Delta x^4 \frac{\partial^4 u}{\partial x^4} + \mathcal{O}(\Delta x^5)\]
+    \item 假设一阶导数的差分公式为：
+    \[
+    \frac{\partial^2 u}{\partial^2 x} = a u_{i-2} + b u_{i-1} + c u_i
+    \]
+    其中 \( a, b, c \) 是待定系数。
+    \item 将 \( u_{i-2}, u_{i-1} \) 的泰勒展开式代入差分公式，整理各阶导数的系数，得到以下方程组：
+    \[
+    a + b + c  = 0 \quad \text{（消除常数项）}
+    \]
+    \[
+    -2a - b  = 0 \quad \text{（消除一阶导数项）}
+    \]
+    \[
+    4a + b  = \frac{2}{\Delta x^2} \quad \text{（二阶导数项系数为 1）}
+    \]
+    \item 解方程组，得到：
+    \[
+    a = \frac{1}{\Delta x^2}, \quad b = \frac{-2}{\Delta x^2}, \quad c = \frac{1}{\Delta x^2}
+    \]
+
+    \item 将系数代入差分公式，得到：
+    \[
+    \frac{\partial^2 u}{\partial x^2} = \frac{u_{i-2} -2 u_{i-1} + u_i }{\Delta x^2} + \mathcal{O}(\Delta x)
+    \]
+
+    \item 精度：$\mathcal{O}(\Delta x)$。
+    
+    
+\end{itemize}
+\subsubsection{采用3个点的二阶差分格式}
+\begin{itemize}
+    \item 三点格式：
+    将$u_{i+1}$,$u_{i-1}$泰勒展开到4阶：
+    \[u_{i+1} = u_i + \Delta x \frac{\partial u}{\partial x} + \frac{1}{2} \Delta x^2 \frac{\partial^2 u}{\partial x^2} + \frac{1}{6} \Delta x^3 \frac{\partial^3 u}{\partial x^3} + \frac{1}{24} \Delta x^4 \frac{\partial^4 u}{\partial x^4} + \mathcal{O}(\Delta x^5)\]
+    \[u_{i-1} = u_i - \Delta x \frac{\partial u}{\partial x} + \frac{1}{2} \Delta x^2 \frac{\partial^2 u}{\partial x^2} -\frac{1}{6} \Delta x^3 \frac{\partial^3 u}{\partial x^3} + \frac{1}{24} \Delta x^4 \frac{\partial^4 u}{\partial x^4} + \mathcal{O}(\Delta x^5)\]
+    \item 假设二阶导数的差分公式为：
+    \[
+    \frac{\partial^2 u}{\partial x^2} = a u_{i-1} + b u_i + c u_{i+1}
+    \]
+    其中 \( a, b, c \) 是待定系数。
+
+    \item 将 \( u_{i+1}, u_{i-1} \) 的泰勒展开式代入差分公式，整理各阶导数的系数，得到以下方程组：
+    \[
+    a + b + c  = 0 \quad \text{（消除常数项）}
+    \]
+    \[
+    -a + c  = 0 \quad \text{（消除一阶导数项）}
+    \]
+    \[
+    a + c = \frac{2}{\Delta x^2} \quad \text{（二阶导数项系数为 1）}
+    \]
+    \[
+    -a + c= 0 \quad \text{（消除三阶导数项）}
+    \]
+    
+
+    \item 解方程组，得到：
+    \[
+    a = \frac{1}{\Delta x^2}, \quad b = \frac{-2}{\Delta x^2}, \quad c = \frac{1}{\Delta x^2}
+    \]
+
+    \item 将系数代入差分公式，得到：
+    \[
+    \frac{\partial^2 u}{\partial x^2} = \frac{u_{i-1} - 2 u_i + u_{i+1} }{\Delta x^2} + \mathcal{O}(\Delta x^2)
+    \]
+
+    \item 精度：$\mathcal{O}(\Delta x^2)$。
+    
+    
+\end{itemize}
+
+\section{代码生成和调试}
+以下是用于验证格式精度的 Python 代码：
+
+\lstinputlisting[language=Python]{code.py} % 引用 Python 文件
+
+\section{结果讨论}
+
+
+
+\end{document}
