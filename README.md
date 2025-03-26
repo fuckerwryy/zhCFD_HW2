@@ -24,4 +24,5 @@
 - 在HW2.tex查看报告的 latex 源码
 - 查看由latex编译的HW2.pdf报告
 - 在code.py查看 python 源码，可以直接运行以查看4张误差分析图
+- 在commit.pdf查看git版本控制记录，也可以直接访问github网址https://github.com/zhehee/zhCFD_HW2#
 
