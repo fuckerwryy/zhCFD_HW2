@@ -164,26 +164,26 @@
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=1\textwidth]{double-precision_error_analysis_(f(x)=x³).pdf}
+    \includegraphics[width=1\textwidth]{double-precision_error_analysis_(f(x)=x³).png}
     \caption{双精度误差分析：$f(x) = x^3$}
 \end{figure}
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=1\textwidth]{double-precision_error_analysis_(f(x)=sin(2x)).pdf}
+    \includegraphics[width=1\textwidth]{double-precision_error_analysis_(f(x)=sin(2x)).png}
     \caption{双精度误差分析: $f(x) = \sin(2x)$}
 \end{figure}
 \newpage
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=1\textwidth]{single-precision_error_analysis_(f(x)=x³).pdf}
+    \includegraphics[width=1\textwidth]{single-precision_error_analysis_(f(x)=x³).png}
     \caption{单精度误差分析：$f(x) = x^3$}
 \end{figure}
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=1\textwidth]{single-precision_error_analysis_(f(x)=sin(2x)).pdf}
+    \includegraphics[width=1\textwidth]{single-precision_error_analysis_(f(x)=sin(2x)).png}
     \caption{单精度误差分析: $f(x) = \sin(2x)$}
 \end{figure}
 \newpage
@@ -210,11 +210,13 @@
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        \textbf{AI名称} & \textbf{生成代码功能} & \textbf{核心算法部分自主编写比例} \\
+        \textbf{AI名称} & \textbf{生成代码功能} & \textbf{使用内容} \\
         \hline
-        Copilot & latex格式框架 & 文本均由自己编写 \\
+        Copilot & latex格式框架 &  165-188行图片插入\\
         \hline
-        Deepseek & python绘图调整 & 100\\
+        Deepseek & python绘图调整 & 87-106行误差图绘制的具体参数调整\\
+        \hline
+        Deepseek & gitignore文件忽略 & 全由ai添加\\
         \hline
 \end{tabular}
 \end{table}
