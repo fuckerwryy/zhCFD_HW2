@@ -70,3 +70,38 @@ def compute_errors(f, df_exact, d2f_exact, x_range=(0.0, 2 * np.pi), num_points=
     return h_list, errors
 
 
+def plot_errors(h_list, errors, title):
+    """绘制误差随步长的变化曲线"""
+    plt.figure(figsize=(10, 6))
+    markers = {'first_order_forward': 'o', 'first_order_centered': 's',
+               'second_order_back': 'D', 'second_order_centered': '^'}
+    for key in errors:
+        plt.loglog(h_list, errors[key], f'{markers[key]}-', label=key)
+    plt.loglog(h_list, h_list, 'k--', label='O(h)')
+    plt.loglog(h_list, h_list ** 2, 'k:', label='O(h²)')
+    # 设置坐标轴
+    ax = plt.gca()
+
+    # 增加x轴刻度密度
+    from matplotlib.ticker import LogLocator, LogFormatterSciNotation
+    ax.xaxis.set_major_locator(LogLocator(base=10, numticks=15))  # 主刻度
+    ax.xaxis.set_minor_locator(LogLocator(base=10, subs=np.arange(2, 10) * 0.1))  # 次刻度
+    ax.xaxis.set_major_formatter(LogFormatterSciNotation())  # 科学计数法格式
+
+    # 强制显示所有步长标签
+    ax.set_xticks(h_list)
+    ax.set_xticklabels([f"{h:.2e}" for h in h_list], rotation=45, ha='right', fontsize=9)
+
+    # 标签和标题
+    plt.xlabel(' Δx', fontsize=12)
+    plt.ylabel('maximum error', fontsize=12)
+    plt.title(title, fontsize=14)
+
+    # 网格和图例
+    plt.grid(True, which='both', linestyle='--', alpha=0.5)
+    plt.legend(fontsize=10)
+
+    # 自动调整布局
+    plt.tight_layout()
+    plt.show()
+
