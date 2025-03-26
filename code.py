@@ -1,7 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
+# ======================
+# 格式函数
+# ======================
 def first_order_forward(u, dx):
     """一阶前向差分（数组长度自动减1）
     公式: (u_{i+1} - u_{i}) / dx
@@ -61,7 +63,7 @@ def compute_errors(f, df_exact, d2f_exact, x_range=(0.0, 2 * np.pi), num_points=
         d2u_back = second_order_back(u, dx)
         d2u_fourth = second_order_centered(u, dx)
 
-        # 计算最大误差（忽略边界）
+        # 计算最大误差
         errors['first_order_forward'].append(np.abs(du_forward[:] - df_exact(x)[:-1]).max())
         errors['first_order_centered'].append(np.abs(du_centered[:] - df_exact(x)[1:-1]).max())
         errors['second_order_back'].append(np.abs(d2u_back[:] - d2f_exact(x)[2:]).max())
@@ -100,8 +102,6 @@ def plot_errors(h_list, errors, title):
     # 网格和图例
     plt.grid(True, which='both', linestyle='--', alpha=0.5)
     plt.legend(fontsize=10)
-
-    # 自动调整布局
     plt.tight_layout()
     plt.show()
 
