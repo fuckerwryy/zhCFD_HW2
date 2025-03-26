@@ -5,6 +5,8 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{booktabs}
 
 \lstset{
     language=Python, % 添加语言支持
@@ -85,8 +87,8 @@
     \]
 
     \item 精度：$\mathcal{O}(\Delta x)$。
-    
-    
+
+
 \end{itemize}
 \subsubsection{采用3个点的二阶差分格式}
 \begin{itemize}
@@ -113,7 +115,7 @@
     \[
     -a + c= 0 \quad \text{（消除三阶导数项）}
     \]
-    
+
 
     \item 解方程组，得到：
     \[
@@ -126,17 +128,81 @@
     \]
 
     \item 精度：$\mathcal{O}(\Delta x^2)$。
-    
-    
+
+
 \end{itemize}
+后续代码中以$h$代替$\Delta x$。
 
 \section{代码生成和调试}
 以下是用于验证格式精度的 Python 代码：
 
-\lstinputlisting[language=Python]{code.py} % 引用 Python 文件
-
-\section{结果讨论}
+\lstinputlisting[language=Python]{code.py}
 
 
+\subsection{代码结构}
+\begin{itemize}
+    \item \textbf{数值微分模块} (4种差分格式)
+    \item \textbf{误差分析模块}:
+    \begin{itemize}
+        \item \texttt{compute\_errors()}: 误差计算
+
+        误差计算采用最大绝对误差准则：
+
+        \[E_{\text{max}} = \max\left(\left|\mathbf{u}_{\text{数值解}} - \mathbf{u}_{\text{精确解}}\right|\right)\]
+
+        \item \texttt{plot\_errors()}: 可视化绘图
+    \end{itemize}
+    \item \textbf{测试模块} (两类测试函数，分双精度和单精度绘制一共4幅误差图)
+\end{itemize}
+
+\section{数值结果讨论以及物理解释}
+
+\subsection{收敛阶验证}
+
+由代码实现的误差分析结果图如下：
+\newpage
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{double-precision_error_analysis_(f(x)=x³).pdf}
+    \caption{双精度误差分析：$f(x) = x^3$}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{double-precision_error_analysis_(f(x)=sin(2x)).pdf}
+    \caption{双精度误差分析: $f(x) = \sin(2x)$}
+\end{figure}
+\newpage
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{single-precision_error_analysis_(f(x)=x³).pdf}
+    \caption{单精度误差分析：$f(x) = x^3$}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{single-precision_error_analysis_(f(x)=sin(2x)).pdf}
+    \caption{单精度误差分析: $f(x) = \sin(2x)$}
+\end{figure}
+\newpage
+
+由图1到图4可以看出，双精度和单精度的误差分析结果基本一致。对一阶导数，向前差分的误差收敛阶为$O(\Delta x)$，中心差分的误差收敛阶为$O(\Delta x^2)$。对二阶导数，向前差分的误差收敛阶为$O(\Delta x)$，中心差分的误差收敛阶为$O(\Delta x^2)$。
+对二阶导数，向后差分的误差收敛阶为$O(\Delta x)$，中心差分的误差收敛阶为$O(\Delta x^2)$。
+
+\subsection{误差特性分析}
+
+
+由图1可以发现，对$f(x) = x^3$，一阶导数的向前差分和中心差分的误差随着$\Delta x$的减小而减小，但是向前差分的误差始终大于中心差分的误差。这是因为此时二者的主导误差项为截断误差，向前差分的截断误差为$O(\Delta x)$，而中心差分的截断误差为$O(\Delta x^2)$。
+但是对二阶导数中心差分格式，此时没有截断误差，只有舍入误差，所以误差随着$\Delta x$的减小而减小。
+
+对比图1和图2，对$f(x) = \sin(2x)$，一阶导数的两种格式和二阶导数的一阶格式的误差仍以截断误差为主，行为没有太大变化。
+但是对二阶导数中心差分格式，此时相比于图1，误差的主要来源已经从舍入误差变成了截断误差。
+
+对比图1和图3，对$f(x) = x^3$，发现一阶导数的向前差分格式误差没有太大影响，而中心差分格式的误差在$\Delta x$很小的时候偏离了$O(\Delta x^2)$的直线，说明在单精度的情况下$\Delta x$所带来的舍入误差比其截断误差大，舍入误差占主导，$\Delta x$越小舍入误差越大。
+同理对二阶导数的一阶格式，误差也偏离了$O(\Delta x)$的直线，说明此时舍入误差占主导。对二阶导数的中心差分格式，没有截断误差只有舍入误差，相比于图1可以看出单精度的舍入误差比双精度的舍入误差大许多。
+
+对比图2和图4，对$f(x) = \sin(2x)$，发现单双精度对一阶导数的两种格式和二阶导数的一阶格式的误差没有太大影响，而中心差分格式的误差在$\Delta x$很小的时候偏离了$O(\Delta x^2)$的直线，说明在单精度的情况下$\Delta x$所带来的舍入误差比其截断误差大，舍入误差占主导，$\Delta x$越小舍入误差越大。
 
 \end{document}
