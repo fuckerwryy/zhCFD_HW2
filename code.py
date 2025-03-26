@@ -105,3 +105,32 @@ def plot_errors(h_list, errors, title):
     plt.tight_layout()
     plt.show()
 
+# ======================
+# 测试函数与主程序
+# ======================
+
+if __name__ == "__main__":
+    # 测试函数1：三次多项式
+    f_poly = lambda x: x ** 3
+    df_poly = lambda x: 3 * x ** 2
+    d2f_poly = lambda x: 6 * x
+
+    # 测试函数2：正弦函数
+    k = 2
+    f_sine = lambda x: np.sin(k * x)
+    df_sine = lambda x: k * np.cos(k * x)
+    d2f_sine = lambda x: -k ** 2 * np.sin(k * x)
+
+    # 双精度分析舍入误差和截断误差
+    h_list_double_rounding, errors_double_rounding = compute_errors(f_poly, df_poly, d2f_poly, dtype=np.float64)
+    plot_errors(h_list_double_rounding, errors_double_rounding, "double-precision error analysis (f(x)=x³)")
+
+    h_list_double_truncation, errors_double_truncation = compute_errors(f_sine, df_sine, d2f_sine, dtype=np.float64)
+    plot_errors(h_list_double_truncation, errors_double_truncation, "double-precision error analysis (f(x)=sin(2x))")
+    # 单精度分析舍入误差和截断误差
+    h_list_single_rounding, errors_single_rounding = compute_errors(f_poly, df_poly, d2f_poly, dtype=np.float32)
+    plot_errors(h_list_single_rounding, errors_single_rounding, "single-precision error analysis (f(x)=x³)")
+
+    h_list_single_truncation, errors_single_truncation = compute_errors(f_sine, df_sine, d2f_sine, dtype=np.float32)
+    plot_errors(h_list_single_truncation, errors_single_truncation, "single-precision error analysis (f(x)=sin(2x))")
+
