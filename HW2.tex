@@ -205,4 +205,17 @@
 
 对比图2和图4，对$f(x) = \sin(2x)$，发现单双精度对一阶导数的两种格式和二阶导数的一阶格式的误差没有太大影响，而中心差分格式的误差在$\Delta x$很小的时候偏离了$O(\Delta x^2)$的直线，说明在单精度的情况下$\Delta x$所带来的舍入误差比其截断误差大，舍入误差占主导，$\Delta x$越小舍入误差越大。
 
+\section{AI工具使用说明表}
+\begin{table}[!htbp]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{AI名称} & \textbf{生成代码功能} & \textbf{核心算法部分自主编写比例} \\
+        \hline
+        Copilot & latex格式框架 & 文本均由自己编写 \\
+        \hline
+        Deepseek & python绘图调整 & 100\\
+        \hline
+\end{tabular}
+\end{table}
 \end{document}
